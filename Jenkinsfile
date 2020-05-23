@@ -44,7 +44,7 @@ node {
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           sleep 20 
           export KUBECONFIG=config
-          PROMO_URL=http://\$(kubectl get svc --namespace grafana graphenedb-grafana --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+          GRAF_URL=http://\$(kubectl get svc --namespace grafana graphenedb-grafana --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
          """
     }
     
