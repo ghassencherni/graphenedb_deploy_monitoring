@@ -1,6 +1,6 @@
 node {
 
-  git 'https://github.com/ghassencherni/graphenedb_deploy_monitoring.git'
+  git 'https://github.com/ghassencherni/mykveks_deploy_monitoring.git'
   withCredentials([usernamePassword(credentialsId: 'aws_credentials', usernameVariable: 'ACCESS_KEY', passwordVariable: 'SECRET_ACCESS')])
 {
 
@@ -8,14 +8,14 @@ node {
 
 
     stage('Getting "config"') {
-      copyArtifacts filter: 'config', fingerprintArtifacts: true, projectName: 'graphenedb_deploy_eks', selector: upstream(fallbackToLastSuccessful: true)
+      copyArtifacts filter: 'config', fingerprintArtifacts: true, projectName: 'mykveks_deploy_eks', selector: upstream(fallbackToLastSuccessful: true)
     }
     stage('Deploy Prometheus') {
       sh """
           export AWS_ACCESS_KEY_ID='$ACCESS_KEY'
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
-          helm install stable/prometheus --name graphenedb-prometheus --values graphenedb.prometheus.values --namespace monitoring --version $prometheus_chart_version
+          helm install stable/prometheus --name mykveks-prometheus --values mykveks.prometheus.values --namespace monitoring --version $prometheus_chart_version
          """
     }
     stage('Deploy Grafana') {
@@ -23,7 +23,7 @@ node {
           export AWS_ACCESS_KEY_ID='$ACCESS_KEY'
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
-          helm install stable/grafana --name graphenedb-grafana --values graphenedb.grafana.values --set adminPassword=$grafana_password --namespace monitoring --values grafana.yaml --version $grafana_chart_version 
+          helm install stable/grafana --name mykveks-grafana --values mykveks.grafana.values --set adminPassword=$grafana_password --namespace monitoring --values grafana.yaml --version $grafana_chart_version 
          """ 
     }
 
@@ -33,7 +33,7 @@ node {
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           sleep 20 
           export KUBECONFIG=config
-          GRAF_URL=http://\$(kubectl get svc --namespace monitoring graphenedb-grafana --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+          GRAF_URL=http://\$(kubectl get svc --namespace monitoring mykveks-grafana --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
          """
     }
     
@@ -47,7 +47,7 @@ if(action == 'Destroy Monitoring') {
           export AWS_ACCESS_KEY_ID='$ACCESS_KEY'
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
-          helm del --purge graphenedb-prometheus
+          helm del --purge mykveks-prometheus
          """
     }
     stage('Remove Grafana Helm') {
@@ -55,8 +55,8 @@ if(action == 'Destroy Monitoring') {
           export AWS_ACCESS_KEY_ID='$ACCESS_KEY'
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
-          helm del --purge graphenedb-grafana
-          kubectl delete services/graphenedb-grafana -n monitoring
+          helm del --purge mykveks-grafana
+          kubectl delete services/mykveks-grafana -n monitoring
          """
     }
    }
