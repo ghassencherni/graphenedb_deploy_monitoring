@@ -18,17 +18,6 @@ node {
           helm install stable/prometheus --name graphenedb-prometheus --values graphenedb.prometheus.values --namespace monitoring --version $prometheus_chart_version
          """
     }
-    
-    stage('Get the Prometheus URL') {
-      sh """
-          export AWS_ACCESS_KEY_ID='$ACCESS_KEY'
-          export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
-          sleep 20
-          export KUBECONFIG=config
-          PROMO_URL=http://\$(kubectl get svc --namespace prometheus graphenedb-prometheus-server --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-         """
-    }
-    
     stage('Deploy Grafana') {
       sh """
           export AWS_ACCESS_KEY_ID='$ACCESS_KEY'
