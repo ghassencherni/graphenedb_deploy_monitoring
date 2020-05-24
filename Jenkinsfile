@@ -59,7 +59,6 @@ if(action == 'Destroy Monitoring') {
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
           helm del --purge graphenedb-prometheus
-          kubectl delete services/graphenedb-prometheus-server -n prometheus
          """
     }
     stage('Remove Grafana Helm') {
