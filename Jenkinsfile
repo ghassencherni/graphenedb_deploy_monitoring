@@ -15,7 +15,7 @@ node {
           export AWS_ACCESS_KEY_ID='$ACCESS_KEY'
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
-          helm install stable/prometheus --name graphenedb-prometheus --values graphenedb.prometheus.values --namespace prometheus --version $prometheus_chart_version
+          helm install stable/prometheus --name graphenedb-prometheus --values graphenedb.prometheus.values --namespace monitoring --version $prometheus_chart_version
          """
     }
     
@@ -34,7 +34,7 @@ node {
           export AWS_ACCESS_KEY_ID='$ACCESS_KEY'
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
-          helm install stable/grafana --name graphenedb-grafana --values graphenedb.grafana.values --set adminPassword=$grafana_password --namespace grafana --version $grafana_chart_version
+          helm install stable/grafana --name graphenedb-grafana --values graphenedb.grafana.values --set adminPassword=$grafana_password --namespace monitoring --values grafana.yaml --version $grafana_chart_version 
          """ 
     }
 
