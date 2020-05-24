@@ -56,7 +56,7 @@ if(action == 'Destroy Monitoring') {
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
           helm del --purge graphenedb-grafana
-          kubectl delete services/graphenedb-grafana -n grafana
+          kubectl delete services/graphenedb-grafana -n monitoring
          """
     }
    }
