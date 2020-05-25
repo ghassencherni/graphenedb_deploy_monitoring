@@ -15,6 +15,8 @@ node {
           export AWS_ACCESS_KEY_ID='$ACCESS_KEY'
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
+          kubectl create namespace monitoring
+          kubectl create secret generic prom-secret-files --from-file=/var/lib/jenkins/secrets/client.pem --from-file=/var/lib/jenkins/secrets/client-key.pem --from-file=/var/lib/jenkins/secrets/ca.crt -n monitoring
           helm install stable/prometheus --name mykveks-prometheus --values mykveks.prometheus.values --namespace monitoring --version $prometheus_chart_version
          """
     }
