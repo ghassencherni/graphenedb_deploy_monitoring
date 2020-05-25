@@ -50,6 +50,7 @@ if(action == 'Destroy Monitoring') {
           export AWS_SECRET_ACCESS_KEY='$SECRET_ACCESS'
           export KUBECONFIG=config
           helm del --purge mykveks-prometheus
+          kubectl delete secret prom-secret-files -n monitoring
          """
     }
     stage('Remove Grafana Helm') {
